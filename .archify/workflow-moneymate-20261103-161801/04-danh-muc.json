@@ -1,0 +1,277 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "04 · Quản lý danh mục và quan hệ giao dịch",
+    "output": ".archify/workflow-moneymate-20261103-161801/04-danh-muc.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Người dùng / giao diện"
+        },
+        "backend": {
+          "label": "Xử lý nghiệp vụ"
+        },
+        "database": {
+          "label": "Dữ liệu tại máy"
+        },
+        "security": {
+          "label": "Kiểm tra / điều kiện"
+        },
+        "cloud": {
+          "label": "Dịch vụ bên ngoài"
+        },
+        "messagebus": {
+          "label": "Tác vụ nền"
+        },
+        "external": {
+          "label": "Tệp / tác nhân"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "validation",
+      "label": "Lỗi nhập thông tin",
+      "variant": "exception"
+    },
+    {
+      "id": "user",
+      "label": "Người dùng · thêm và sửa danh mục"
+    },
+    {
+      "id": "deletion",
+      "label": "Nhánh xóa danh mục"
+    },
+    {
+      "id": "err",
+      "label": "Hủy / còn tham chiếu",
+      "variant": "exception"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "list",
+      "lane": "user",
+      "col": 0,
+      "type": "frontend",
+      "label": "Mở danh mục",
+      "sublabel": "Mặc định và tự tạo",
+      "yOffset": 0
+    },
+    {
+      "id": "action",
+      "lane": "user",
+      "col": 1,
+      "type": "frontend",
+      "label": "Chọn thao tác",
+      "sublabel": "Thêm / sửa / xóa",
+      "icon": "decision",
+      "yOffset": 0
+    },
+    {
+      "id": "input",
+      "lane": "user",
+      "col": 2,
+      "type": "security",
+      "label": "Kiểm tra thông tin",
+      "sublabel": "Tên và loại thu/chi",
+      "yOffset": 0
+    },
+    {
+      "id": "save",
+      "lane": "user",
+      "col": 3,
+      "type": "database",
+      "label": "Lưu danh mục",
+      "sublabel": "Cập nhật danh sách chọn",
+      "yOffset": 0
+    },
+    {
+      "id": "end",
+      "lane": "user",
+      "col": 4,
+      "type": "frontend",
+      "label": "Danh mục sẵn dùng",
+      "sublabel": "Chọn khi nhập giao dịch",
+      "icon": "success",
+      "yOffset": 0
+    },
+    {
+      "id": "used",
+      "lane": "deletion",
+      "col": 2,
+      "type": "security",
+      "label": "Đang có giao dịch?",
+      "sublabel": "Kiểm tra tham chiếu",
+      "icon": "decision",
+      "yOffset": 0
+    },
+    {
+      "id": "confirm",
+      "lane": "deletion",
+      "col": 3,
+      "type": "security",
+      "label": "Xác nhận xóa?",
+      "sublabel": "Chỉ khi chưa được dùng",
+      "yOffset": 0
+    },
+    {
+      "id": "remove",
+      "lane": "deletion",
+      "col": 4,
+      "type": "database",
+      "label": "Xóa danh mục",
+      "sublabel": "Giữ toàn vẹn dữ liệu",
+      "yOffset": 0
+    },
+    {
+      "id": "blocked",
+      "lane": "err",
+      "col": 2,
+      "type": "frontend",
+      "label": "Tạm chặn xóa",
+      "sublabel": "Giải thích còn giao dịch"
+    },
+    {
+      "id": "invalid",
+      "lane": "validation",
+      "col": 2,
+      "type": "frontend",
+      "label": "Thông tin chưa hợp lệ",
+      "sublabel": "Sửa rồi lưu lại"
+    },
+    {
+      "id": "cancel",
+      "lane": "err",
+      "col": 4,
+      "type": "frontend",
+      "label": "Hủy thao tác",
+      "sublabel": "Giữ dữ liệu cũ"
+    }
+  ],
+  "edges": [
+    {
+      "id": "list-action",
+      "from": "list",
+      "to": "action",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "action-input",
+      "from": "action",
+      "to": "input",
+      "label": "Thêm / sửa",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "input-save",
+      "from": "input",
+      "to": "save",
+      "label": "Hợp lệ",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "save-end",
+      "from": "save",
+      "to": "end",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "action-used",
+      "from": "action",
+      "to": "used",
+      "label": "Xóa",
+      "role": "branch"
+    },
+    {
+      "id": "used-confirm",
+      "from": "used",
+      "to": "confirm",
+      "label": "Không",
+      "role": "branch",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "used-blocked",
+      "from": "used",
+      "to": "blocked",
+      "label": "Có",
+      "role": "error",
+      "variant": "security"
+    },
+    {
+      "id": "confirm-remove",
+      "from": "confirm",
+      "to": "remove",
+      "label": "Đồng ý",
+      "role": "branch"
+    },
+    {
+      "id": "confirm-cancel",
+      "from": "confirm",
+      "to": "cancel",
+      "label": "Hủy",
+      "role": "branch"
+    },
+    {
+      "id": "input-invalid",
+      "from": "input",
+      "to": "invalid",
+      "label": "Có lỗi",
+      "role": "error",
+      "variant": "security"
+    },
+    {
+      "id": "invalid-input",
+      "from": "invalid",
+      "to": "input",
+      "label": "Sửa lại",
+      "role": "return"
+    },
+    {
+      "id": "blocked-list",
+      "from": "blocked",
+      "to": "list",
+      "label": "Quay lại",
+      "role": "return",
+      "route": "return-left",
+      "fromSide": "left",
+      "toSide": "left"
+    }
+  ],
+  "mainPath": [
+    "list",
+    "action",
+    "input",
+    "save",
+    "end"
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Yêu cầu trong roadmap",
+      "items": [
+        "Danh mục mặc định: Ăn uống, Di chuyển, Học tập, Lương; cho thêm và sửa danh mục.",
+        "Transaction.categoryId liên kết Category; nâng schema bằng migration không làm mất dữ liệu cũ.",
+        "Phải xử lý trường hợp xóa danh mục đang được dùng. Nguồn: trang 6 và 10."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Chính sách được đề xuất trong sơ đồ",
+      "items": [
+        "Tạm chặn xóa danh mục có giao dịch tham chiếu; không tự xóa dây chuyền giao dịch.",
+        "Roadmap chưa chọn giữa chặn xóa, chuyển danh mục hay ẩn danh mục. Sơ đồ chọn chặn để có nhánh cụ thể.",
+        "Đề xuất: tên không rỗng; không đổi loại thu/chi khi làm sai loại các giao dịch hiện hữu."
+      ]
+    }
+  ]
+}

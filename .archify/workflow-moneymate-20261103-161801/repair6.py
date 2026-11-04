@@ -1,0 +1,15 @@
+exec(open(r'D:\MoneyMate\.archify\workflow-moneymate-20261103-161801\repair.py',encoding='utf-8').read().split("d=load('01-tong-quan')")[0])
+d=load('02-giao-dich')
+n(d,'cancel',lane='fault',col=1)
+d['nodes'].append(dict(id='canceldelete',lane='deletion',col=3,type='frontend',label='Hủy xóa',sublabel='Giữ nguyên giao dịch'))
+e(d,'delete-cancel',to='canceldelete')
+save('02-giao-dich',d)
+d=load('05-xuat-nhap')
+n(d,'cancel',lane='errors',col=1)
+d['nodes'] += [dict(id='cancelpreview',lane='errors',col=3,type='frontend',label='Hủy xác nhận',sublabel='Không nhập dữ liệu'),dict(id='canceldup',lane='duplicate',col=4,type='frontend',label='Hủy nhập tệp',sublabel='Giữ dữ liệu cũ'),dict(id='canceldest',lane='err',col=2,type='frontend',label='Hủy nơi lưu',sublabel='Không xuất tệp')]
+for id,to in [('preview-cancel','cancelpreview'),('dup-cancel','canceldup'),('dest-cancel','canceldest')]:
+    e(d,id,to=to)
+    x=next(x for x in d['edges'] if x['id']==id)
+    for k in ['route','fromSide','toSide']:x.pop(k,None)
+e(d,'file-cancel',fromSide='top',toSide='bottom')
+save('05-xuat-nhap',d)

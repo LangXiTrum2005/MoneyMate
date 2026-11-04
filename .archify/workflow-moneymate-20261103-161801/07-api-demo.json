@@ -1,0 +1,194 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "07 · API demo tách biệt dữ liệu cá nhân",
+    "output": ".archify/workflow-moneymate-20261103-161801/07-api-demo.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Người dùng / giao diện"
+        },
+        "backend": {
+          "label": "Xử lý nghiệp vụ"
+        },
+        "database": {
+          "label": "Dữ liệu tại máy"
+        },
+        "security": {
+          "label": "Kiểm tra / điều kiện"
+        },
+        "cloud": {
+          "label": "Dịch vụ bên ngoài"
+        },
+        "messagebus": {
+          "label": "Tác vụ nền"
+        },
+        "external": {
+          "label": "Tệp / tác nhân"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "user",
+      "label": "Người dùng · tùy chọn tháng 6"
+    },
+    {
+      "id": "app",
+      "label": "Màn thử nghiệm và API"
+    },
+    {
+      "id": "err",
+      "label": "Không có mạng / lỗi phản hồi",
+      "variant": "exception"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "open",
+      "lane": "user",
+      "col": 0,
+      "type": "frontend",
+      "label": "Mở màn API demo",
+      "sublabel": "Có thể bỏ tính năng này"
+    },
+    {
+      "id": "loading",
+      "lane": "app",
+      "col": 1,
+      "type": "frontend",
+      "label": "Hiện đang tải"
+    },
+    {
+      "id": "get",
+      "lane": "app",
+      "col": 2,
+      "type": "cloud",
+      "label": "GET dữ liệu mẫu",
+      "sublabel": "Retrofit + OkHttp"
+    },
+    {
+      "id": "check",
+      "lane": "app",
+      "col": 3,
+      "type": "security",
+      "label": "Phản hồi thành công?",
+      "sublabel": "Kiểm tra HTTP và dữ liệu",
+      "icon": "decision"
+    },
+    {
+      "id": "success",
+      "lane": "user",
+      "col": 4,
+      "type": "frontend",
+      "label": "Hiện dữ liệu mẫu",
+      "sublabel": "Không ghi vào Room chính",
+      "icon": "success"
+    },
+    {
+      "id": "error",
+      "lane": "err",
+      "col": 3,
+      "type": "frontend",
+      "label": "Hiện lỗi mạng / dữ liệu",
+      "sublabel": "Không để màn hình treo"
+    },
+    {
+      "id": "retry",
+      "lane": "err",
+      "col": 4,
+      "type": "frontend",
+      "label": "Thử lại hoặc rời màn",
+      "sublabel": "CRUD offline vẫn dùng được"
+    }
+  ],
+  "edges": [
+    {
+      "id": "open-loading",
+      "from": "open",
+      "to": "loading",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "loading-get",
+      "from": "loading",
+      "to": "get",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "get-check",
+      "from": "get",
+      "to": "check",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "check-success",
+      "from": "check",
+      "to": "success",
+      "label": "Có",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "get-error",
+      "from": "get",
+      "to": "error",
+      "label": "Mất mạng / hết giờ",
+      "role": "error",
+      "variant": "security"
+    },
+    {
+      "id": "check-error",
+      "from": "check",
+      "to": "error",
+      "label": "Không",
+      "role": "error",
+      "variant": "security"
+    },
+    {
+      "id": "error-retry",
+      "from": "error",
+      "to": "retry",
+      "role": "branch"
+    },
+    {
+      "id": "retry-loading",
+      "from": "retry",
+      "to": "loading",
+      "label": "Thử lại",
+      "role": "return"
+    }
+  ],
+  "mainPath": [
+    "open",
+    "loading",
+    "get",
+    "check",
+    "success"
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Ranh giới phạm vi",
+      "items": [
+        "Chỉ dùng dữ liệu công khai / dữ liệu thử, không chứa dữ liệu cá nhân thật.",
+        "Màn API demo độc lập, không đụng Room chính; tắt demo vẫn dùng được CRUD local.",
+        "Không triển khai đồng bộ hai chiều phức tạp. Nguồn: trang 9 và 11."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Đề xuất xử lý lỗi",
+      "items": [
+        "Cho thử lại thủ công; cấu hình thời gian chờ và kiểm tra phản hồi không hợp lệ.",
+        "Fetch/cache dữ liệu thử là bài mở rộng tuần 22; không phải cloud sync của giao dịch cá nhân."
+      ]
+    }
+  ]
+}

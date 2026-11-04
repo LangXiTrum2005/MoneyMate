@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "command": "finalize",
+  "status": "running",
+  "type": "workflow",
+  "quality": "showcase",
+  "startedAt": "2026-11-03T09:21:06.915Z",
+  "specification": {
+    "path": "D:\\MoneyMate\\.archify\\workflow-moneymate-20261103-161801\\01-tong-quan.json",
+    "sha256": "e70e1ae8c1ee709e7b9603b4f2cee1cd37ba7dd2737f91bdc6782b67847eb1b0",
+    "bytes": 7507
+  },
+  "artifact": {
+    "path": "D:\\MoneyMate\\.archify\\workflow-moneymate-20261103-161801\\01-tong-quan.html"
+  },
+  "stages": {},
+  "browserCheck": {
+    "requested": true,
+    "ran": false
+  },
+  "diagnostics": [],
+  "evidence": {
+    "receipt": "D:\\MoneyMate\\.archify\\workflow-moneymate-20261103-161801\\01-tong-quan.finalize.json",
+    "summaryReceipt": "D:\\MoneyMate\\.archify\\workflow-moneymate-20261103-161801\\01-tong-quan.finalize-summary.json"
+  },
+  "visualReview": "not-requested"
+}

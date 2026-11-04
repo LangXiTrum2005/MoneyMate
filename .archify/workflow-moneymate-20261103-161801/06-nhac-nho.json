@@ -1,0 +1,229 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "06 · Bật, tắt và nhận nhắc ghi chép",
+    "output": ".archify/workflow-moneymate-20261103-161801/06-nhac-nho.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Người dùng / giao diện"
+        },
+        "backend": {
+          "label": "Xử lý nghiệp vụ"
+        },
+        "database": {
+          "label": "Dữ liệu tại máy"
+        },
+        "security": {
+          "label": "Kiểm tra / điều kiện"
+        },
+        "cloud": {
+          "label": "Dịch vụ bên ngoài"
+        },
+        "messagebus": {
+          "label": "Tác vụ nền"
+        },
+        "external": {
+          "label": "Tệp / tác nhân"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "user",
+      "label": "Người dùng · mở rộng tháng 4"
+    },
+    {
+      "id": "app",
+      "label": "Cài đặt nhắc ghi chép"
+    },
+    {
+      "id": "worker",
+      "label": "Hệ thống Android / WorkManager"
+    },
+    {
+      "id": "err",
+      "label": "Từ chối quyền / tắt nhắc",
+      "variant": "exception"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "settings",
+      "lane": "user",
+      "col": 1,
+      "type": "frontend",
+      "label": "Mở cài đặt nhắc"
+    },
+    {
+      "id": "toggle",
+      "lane": "app",
+      "col": 1,
+      "type": "security",
+      "label": "Bật hay tắt?",
+      "icon": "decision"
+    },
+    {
+      "id": "permission",
+      "lane": "app",
+      "col": 2,
+      "type": "security",
+      "label": "Có quyền thông báo?",
+      "sublabel": "Xin quyền nếu cần"
+    },
+    {
+      "id": "schedule",
+      "lane": "worker",
+      "col": 2,
+      "type": "messagebus",
+      "label": "Đăng ký lịch nhắc",
+      "sublabel": "WorkManager"
+    },
+    {
+      "id": "run",
+      "lane": "worker",
+      "col": 3,
+      "type": "messagebus",
+      "label": "Hệ thống chạy tác vụ",
+      "sublabel": "Khi điều kiện phù hợp"
+    },
+    {
+      "id": "notification",
+      "lane": "user",
+      "col": 4,
+      "type": "frontend",
+      "label": "Nhận nhắc ghi chép",
+      "sublabel": "Mở app để tự nhập",
+      "icon": "success"
+    },
+    {
+      "id": "denied",
+      "lane": "err",
+      "col": 0,
+      "type": "frontend",
+      "label": "Quyền bị từ chối",
+      "sublabel": "App thu chi vẫn hoạt động"
+    },
+    {
+      "id": "cancel",
+      "lane": "err",
+      "col": 2,
+      "type": "messagebus",
+      "label": "Hủy lịch nhắc",
+      "sublabel": "Lưu trạng thái tắt"
+    },
+    {
+      "id": "wait",
+      "lane": "err",
+      "col": 3,
+      "type": "messagebus",
+      "label": "Tác vụ bị trì hoãn",
+      "sublabel": "Chờ hệ thống chạy"
+    }
+  ],
+  "edges": [
+    {
+      "id": "settings-toggle",
+      "from": "settings",
+      "to": "toggle",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "toggle-permission",
+      "from": "toggle",
+      "to": "permission",
+      "label": "Bật",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "permission-schedule",
+      "from": "permission",
+      "to": "schedule",
+      "label": "Được phép",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "schedule-run",
+      "from": "schedule",
+      "to": "run",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "run-notification",
+      "from": "run",
+      "to": "notification",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "toggle-cancel",
+      "from": "toggle",
+      "to": "cancel",
+      "label": "Tắt",
+      "role": "branch"
+    },
+    {
+      "id": "permission-denied",
+      "from": "permission",
+      "to": "denied",
+      "label": "Từ chối",
+      "role": "error",
+      "variant": "security"
+    },
+    {
+      "id": "denied-settings",
+      "from": "denied",
+      "to": "settings",
+      "label": "Đổi lựa chọn",
+      "role": "return"
+    },
+    {
+      "id": "schedule-wait",
+      "from": "schedule",
+      "to": "wait",
+      "label": "Chưa thể chạy",
+      "role": "branch"
+    },
+    {
+      "id": "wait-run",
+      "from": "wait",
+      "to": "run",
+      "label": "Đủ điều kiện",
+      "role": "return"
+    }
+  ],
+  "mainPath": [
+    "settings",
+    "toggle",
+    "permission",
+    "schedule",
+    "run",
+    "notification"
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Yêu cầu và giới hạn",
+      "items": [
+        "Nhắc hằng ngày có thể bật / tắt; cài đặt lưu bằng DataStore.",
+        "WorkManager không bảo đảm giờ chính xác tuyệt đối; hiển thị khi job được hệ thống chạy.",
+        "Từ chối thông báo không làm gián đoạn CRUD offline. Nguồn: trang 2, 7, 10."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Đề xuất khi triển khai",
+      "items": [
+        "Đăng ký công việc duy nhất để tránh lịch trùng; kiểm tra lại cài đặt và quyền khi worker chạy.",
+        "Giờ nhắc mặc định và nội dung thông báo chưa được chốt trong roadmap."
+      ]
+    }
+  ]
+}

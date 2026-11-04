@@ -1,0 +1,322 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "01 · Luồng chính: mở ứng dụng và ghi chép thu chi",
+    "output": ".archify/workflow-moneymate-20261103-161801/01-tong-quan.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "entries": {
+        "frontend": {
+          "label": "Người dùng / giao diện"
+        },
+        "backend": {
+          "label": "Xử lý nghiệp vụ"
+        },
+        "database": {
+          "label": "Dữ liệu tại máy"
+        },
+        "security": {
+          "label": "Kiểm tra / điều kiện"
+        },
+        "cloud": {
+          "label": "Dịch vụ bên ngoài"
+        },
+        "messagebus": {
+          "label": "Tác vụ nền"
+        },
+        "external": {
+          "label": "Tệp / tác nhân"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "read",
+      "label": "Dữ liệu rỗng / tải lại",
+      "variant": "exception"
+    },
+    {
+      "id": "app",
+      "label": "Luồng chính · người dùng và ứng dụng"
+    },
+    {
+      "id": "lock",
+      "label": "Nhánh xác thực · mở rộng tháng 5"
+    },
+    {
+      "id": "err",
+      "label": "Xác thực chưa thành công",
+      "variant": "exception"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "open",
+      "lane": "app",
+      "col": 1,
+      "type": "frontend",
+      "label": "Mở / quay lại app",
+      "icon": "start"
+    },
+    {
+      "id": "gate",
+      "lane": "app",
+      "col": 2,
+      "type": "security",
+      "label": "Cần xác thực?",
+      "sublabel": "Đã bật khóa và hết hạn",
+      "icon": "decision"
+    },
+    {
+      "id": "home",
+      "lane": "app",
+      "col": 3,
+      "type": "frontend",
+      "label": "Xem trang chủ",
+      "sublabel": "Số dư, thu, chi, gần nhất"
+    },
+    {
+      "id": "form",
+      "lane": "app",
+      "col": 4,
+      "type": "frontend",
+      "label": "Ghi chép giao dịch",
+      "sublabel": "Thêm / sửa / xóa",
+      "yOffset": -92
+    },
+    {
+      "id": "commit",
+      "lane": "app",
+      "col": 4,
+      "type": "database",
+      "label": "Kiểm tra và lưu",
+      "sublabel": "Chi tiết tại sơ đồ 02",
+      "yOffset": 0
+    },
+    {
+      "id": "result",
+      "lane": "app",
+      "col": 4,
+      "type": "backend",
+      "label": "Cập nhật kết quả",
+      "sublabel": "Số dư, thống kê, ngân sách",
+      "icon": "success",
+      "yOffset": 92
+    },
+    {
+      "id": "auth",
+      "lane": "lock",
+      "col": 5,
+      "type": "security",
+      "label": "Xác thực thiết bị",
+      "sublabel": "Sinh trắc học / khóa máy",
+      "yOffset": -46
+    },
+    {
+      "id": "fallback",
+      "lane": "lock",
+      "col": 5,
+      "type": "security",
+      "label": "Không có sinh trắc",
+      "sublabel": "Dùng khóa màn hình máy",
+      "yOffset": 46
+    },
+    {
+      "id": "denied",
+      "lane": "err",
+      "col": 5,
+      "type": "security",
+      "label": "Chưa mở khóa",
+      "sublabel": "Thử lại hoặc thoát"
+    },
+    {
+      "id": "empty",
+      "lane": "read",
+      "col": 4,
+      "type": "frontend",
+      "label": "Chưa có giao dịch",
+      "sublabel": "Hiện số 0 và hướng dẫn"
+    },
+    {
+      "id": "readerror",
+      "lane": "read",
+      "col": 0,
+      "type": "frontend",
+      "label": "Không đọc được dữ liệu",
+      "sublabel": "Báo lỗi; cho tải lại",
+      "yOffset": -46
+    },
+    {
+      "id": "retry",
+      "lane": "read",
+      "col": 0,
+      "type": "frontend",
+      "label": "Tải lại trang chủ",
+      "sublabel": "Không sửa dữ liệu",
+      "yOffset": 46
+    }
+  ],
+  "edges": [
+    {
+      "id": "open-gate",
+      "from": "open",
+      "to": "gate",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "gate-home",
+      "from": "gate",
+      "to": "home",
+      "label": "Không",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "home-form",
+      "from": "home",
+      "to": "form",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "form-commit",
+      "from": "form",
+      "to": "commit",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "commit-result",
+      "from": "commit",
+      "to": "result",
+      "label": "Thành công",
+      "role": "main",
+      "variant": "emphasis"
+    },
+    {
+      "id": "gate-auth",
+      "from": "gate",
+      "to": "auth",
+      "label": "Có",
+      "role": "branch"
+    },
+    {
+      "id": "auth-home",
+      "from": "auth",
+      "to": "home",
+      "label": "Đúng",
+      "role": "return"
+    },
+    {
+      "id": "auth-denied",
+      "from": "auth",
+      "to": "denied",
+      "label": "Sai / hủy",
+      "role": "error",
+      "variant": "security"
+    },
+    {
+      "id": "denied-auth",
+      "from": "denied",
+      "to": "auth",
+      "label": "Thử lại",
+      "role": "return"
+    },
+    {
+      "id": "auth-fallback",
+      "from": "auth",
+      "to": "fallback",
+      "label": "Không hỗ trợ",
+      "role": "branch"
+    },
+    {
+      "id": "fallback-home",
+      "from": "fallback",
+      "to": "home",
+      "label": "Xác thực đúng",
+      "role": "return"
+    },
+    {
+      "id": "fallback-denied",
+      "from": "fallback",
+      "to": "denied",
+      "label": "Không khả dụng",
+      "role": "error",
+      "variant": "security"
+    },
+    {
+      "id": "home-empty",
+      "from": "home",
+      "to": "empty",
+      "label": "Dữ liệu rỗng",
+      "role": "branch"
+    },
+    {
+      "id": "empty-form",
+      "from": "empty",
+      "to": "form",
+      "label": "Thêm đầu tiên",
+      "role": "branch"
+    },
+    {
+      "id": "home-readerror",
+      "from": "home",
+      "to": "readerror",
+      "label": "Lỗi đọc",
+      "role": "error",
+      "variant": "security"
+    },
+    {
+      "id": "readerror-retry",
+      "from": "readerror",
+      "to": "retry",
+      "label": "Thử lại",
+      "role": "branch"
+    },
+    {
+      "id": "retry-home",
+      "from": "retry",
+      "to": "home",
+      "role": "return"
+    }
+  ],
+  "mainPath": [
+    "open",
+    "gate",
+    "home",
+    "form",
+    "commit",
+    "result"
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Phạm vi thiết kế đích",
+      "items": [
+        "MVP tháng 1–3: dùng offline; người dùng tự nhập dữ liệu.",
+        "Không có đăng nhập tài khoản, kết nối ngân hàng hoặc thanh toán tiền thật trong phạm vi roadmap.",
+        "Khóa app là tùy chọn tháng 5; không bật khóa thì đi thẳng trang chủ."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Cách đọc và nguồn",
+      "items": [
+        "Roadmap: trang 2, 5–6, 8, 10. Mã nguồn hiện tại chỉ hiển thị Hello Android.",
+        "Sơ đồ là nghiệp vụ dự kiến, chưa phải tính năng đã triển khai.",
+        "Nhánh lỗi đọc và tải lại là cách xử lý đề xuất. Thời gian hết hạn khóa chưa được chốt."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Các luồng liên quan",
+      "items": [
+        "02: giao dịch · 03: thống kê và ngân sách · 04: danh mục.",
+        "05: xuất / nhập · 06: nhắc ghi chép · 07: API demo."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+package com.example.moneymate.ui.theme
+
+import androidx.compose.ui.graphics.Color
+
+val PrimaryPurple = Color(0xFF5B4FE8)
+val GradientBlue = Color(0xFF4977ED)
+val PageBackground = Color(0xFFF7F7FD)
+val Ink = Color(0xFF15152C)
+val MutedInk = Color(0xFF67677E)
+val IncomeGreen = Color(0xFF00A94F)
+val ExpenseRed = Color(0xFFF04438)
+val ProgressGreen = Color(0xFF29C579)
+val TrackLavender = Color(0xFFE5E5F0)
+val SoftPurple = Color(0xFFEEE7FF)
+val BudgetPink = Color(0xFFE45DE2)
+val SoftOrange = Color(0xFFFFEDE0)
+val FoodOrange = Color(0xFFFF864C)
+val FieldBorder = Color(0xFFD9D9E4)
+val TransportBlue = Color(0xFF4F46CB)
+val SoftBlue = Color(0xFFECEBFF)
+val SalaryGreen = Color(0xFF009D60)
+val SoftGreen = Color(0xFFE0F5EB)
+val ShoppingPink = Color(0xFFD63DB2)
+val SoftPink = Color(0xFFFCE5F5)
