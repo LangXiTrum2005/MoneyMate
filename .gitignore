@@ -17,3 +17,14 @@ local.properties
 # Local Kotlin and Android build outputs
 .kotlin/
 **/build/
+
+# Track only the Android project and the files required to build it.
+/*
+!/.gitignore
+!/app/
+!/gradle/
+!/build.gradle.kts
+!/settings.gradle.kts
+!/gradle.properties
+!/gradlew
+!/gradlew.bat

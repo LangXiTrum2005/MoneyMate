@@ -1,8 +1,0 @@
-exec(open(r'D:\MoneyMate\.archify\workflow-moneymate-20261103-161801\repair.py',encoding='utf-8').read().split("d=load('01-tong-quan')")[0])
-d=load('01-tong-quan');n(d,'retry',col=5)
-x=next(x for x in d['edges'] if x['id']=='retry-home')
-for key in ['route','fromSide','toSide']:x.pop(key,None)
-e(d,'home-readerror',fromSide='bottom',toSide='left')
-save('01-tong-quan',d)
-d=load('02-giao-dich');e(d,'delete-write',route='drop',fromSide='bottom',toSide='top',bias=0.5);save('02-giao-dich',d)
-d=load('05-xuat-nhap');x=next(x for x in d['edges'] if x['id']=='dest-cancel');x.pop('route',None);save('05-xuat-nhap',d)
