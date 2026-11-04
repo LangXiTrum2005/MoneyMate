@@ -28,12 +28,14 @@ import com.example.moneymate.R
 import com.example.moneymate.ui.theme.*
 
 @Composable
-fun HomeScreen(onAddTransaction: () -> Unit = {}, onTransactions: () -> Unit = {}) {
+fun HomeScreen(onAddTransaction: () -> Unit = {}, onTransactions: () -> Unit = {}, onStatistics: () -> Unit = {},
+    onSettings: () -> Unit = {}) {
     Scaffold(
         containerColor = PageBackground,
         bottomBar = {
             MoneyMateBottomBar(PrimaryDestination.Home, onHome = {},
-                onTransactions = onTransactions, onAddTransaction = onAddTransaction)
+                onTransactions = onTransactions, onAddTransaction = onAddTransaction,
+                onStatistics = onStatistics, onSettings = onSettings)
         }
     ) { insets ->
         Box(Modifier.fillMaxSize().padding(insets), contentAlignment = Alignment.TopCenter) {

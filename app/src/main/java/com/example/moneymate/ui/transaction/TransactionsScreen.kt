@@ -38,13 +38,16 @@ fun TransactionsScreen(
     onSelectTab: (Int) -> Unit,
     onBack: () -> Unit,
     onHome: () -> Unit,
-    onAddTransaction: () -> Unit
+    onAddTransaction: () -> Unit,
+    onStatistics: () -> Unit = {},
+    onSettings: () -> Unit = {}
 ) {
     Scaffold(
         containerColor = PageBackground,
         bottomBar = {
             MoneyMateBottomBar(PrimaryDestination.Transactions, onHome,
-                onTransactions = {}, onAddTransaction)
+                onTransactions = {}, onAddTransaction = onAddTransaction,
+                onStatistics = onStatistics, onSettings = onSettings)
         }
     ) { insets ->
         Box(Modifier.fillMaxSize().padding(insets), contentAlignment = Alignment.TopCenter) {

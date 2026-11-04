@@ -23,14 +23,16 @@ import androidx.compose.ui.unit.sp
 import com.example.moneymate.R
 import com.example.moneymate.ui.theme.*
 
-enum class PrimaryDestination { Home, Transactions }
+enum class PrimaryDestination { Home, Transactions, Statistics }
 
 @Composable
 fun MoneyMateBottomBar(
     selectedDestination: PrimaryDestination,
     onHome: () -> Unit,
     onTransactions: () -> Unit,
-    onAddTransaction: () -> Unit
+    onAddTransaction: () -> Unit,
+    onStatistics: () -> Unit = {},
+    onSettings: () -> Unit = {}
 ) {
     Surface(color = Color.White, shadowElevation = 8.dp) {
         Box(Modifier.fillMaxWidth().navigationBarsPadding(), contentAlignment = Alignment.Center) {
@@ -47,8 +49,10 @@ fun MoneyMateBottomBar(
                         BottomIcon(R.drawable.ic_plus, Modifier.size(30.dp), R.string.add_transaction, Color.White)
                     }
                 }
-                BottomItem(R.drawable.ic_chart, R.string.statistics, false, Modifier.weight(1f))
-                BottomItem(R.drawable.ic_settings, R.string.settings, false, Modifier.weight(1f))
+                BottomItem(R.drawable.ic_chart, R.string.statistics, selectedDestination == PrimaryDestination.Statistics,
+                    Modifier.weight(1f).testTag("bottom_statistics"), onStatistics)
+                BottomItem(R.drawable.ic_settings, R.string.settings, false,
+                    Modifier.weight(1f).testTag("bottom_settings"), onSettings)
             }
         }
     }

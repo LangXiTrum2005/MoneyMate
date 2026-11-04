@@ -52,4 +52,27 @@
     <string name="transactions_transport_amount">-50.000 đ</string>
     <string name="transactions_salary_amount">+15.000.000 đ</string>
     <string name="transactions_shopping_amount">-300.000 đ</string>
+    <string name="statistics_month">Tháng</string>
+    <string name="statistics_quarter">Quý</string>
+    <string name="statistics_year">Năm</string>
+    <string name="statistics_entertainment">Giải trí</string>
+    <string name="statistics_other">Khác</string>
+    <string name="statistics_total">2.550.000 đ</string>
+    <string name="statistics_daily">Chi tiêu theo ngày</string>
+    <string name="statistics_previous">Kỳ trước</string>
+    <string name="statistics_next">Kỳ sau</string>
+    <string name="statistics_period">Tháng %1$d, %2$d</string>
+    <string name="statistics_percent">%1$d%%</string>
+    <string name="statistics_chart_description">Tổng chi 2.550.000 đồng. Ăn uống 39 phần trăm, mua sắm 20 phần trăm, di chuyển 12 phần trăm, giải trí 8 phần trăm, khác 21 phần trăm.</string>
+    <string name="statistics_daily_description">Biểu đồ chi tiêu mẫu theo ngày, từ ngày 1 đến ngày 21. Trục giá trị từ 0 đến 400 nghìn đồng.</string>
+    <string name="settings_appearance">Giao diện</string>
+    <string name="settings_light">Sáng</string>
+    <string name="settings_currency">Đơn vị tiền tệ</string>
+    <string name="settings_vnd">VND (đ)</string>
+    <string name="settings_reminder">Nhắc nhở ghi chép</string>
+    <string name="settings_reminder_time">20:00 hằng ngày</string>
+    <string name="settings_lock">Khóa ứng dụng</string>
+    <string name="settings_lock_method">Vân tay / Mã PIN</string>
+    <string name="settings_backup">Sao lưu &amp; khôi phục</string>
+    <string name="settings_on">Đang bật</string>
 </resources>
